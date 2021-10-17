@@ -43,8 +43,6 @@
   notify: grub2cfg
   when:
       - rhel8cis_set_boot_pass
-      - grub_pass is defined and grub_pass.passhash is defined
-      - grub_pass.passhash | length > 0
       - rhel8cis_rule_1_5_2
   tags:
       - level1-server
@@ -59,13 +57,13 @@
       - name: "1.5.3 | L1 | PATCH | Ensure authentication required for single user mode | Emergency service"
         lineinfile:
             dest: /usr/lib/systemd/system/emergency.service
-            regexp: '/sbin/sulogin'
+            regexp: '^ExecStart=$'
             line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell emergency'
 
       - name: "1.5.3 | L1 | PATCH | Ensure authentication required for single user mode | Rescue service"
         lineinfile:
             dest: /usr/lib/systemd/system/rescue.service
-            regexp: '/sbin/sulogin'
+            regexp: '^ExecStart=$'
             line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell rescue'
   when:
       - rhel8cis_rule_1_5_3
